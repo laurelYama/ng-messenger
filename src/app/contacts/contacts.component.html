@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts - Messagerie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .contact-item {
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .avatar-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .floating-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .unread-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .status-online {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        }
+        
+        .status-offline {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .message-preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen">
+    <!-- Header -->
+    <div class="header-gradient text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-comments text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">Messages</h1>
+                    <p class="text-sm text-white text-opacity-80">Vos conversations</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                    <i class="fas fa-search text-sm"></i>
+                </button>
+                <button class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all">
+                    <i class="fas fa-ellipsis-v text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative">
+        <!-- Indicateur de messages non lus global -->
+        <div *ngIf="!loading && totalUnread > 0" class="mx-4 mt-4 mb-2">
+            <div class="glass-effect rounded-full px-4 py-2 text-center">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white unread-badge">
+                    <i class="fas fa-envelope mr-1"></i>
+                    {{ totalUnread }} message(s) non lu(s)
+                </span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+            <div class="loading-spinner w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full mb-4"></div>
+            <p class="text-gray-500 font-medium">Chargement de vos conversations...</p>
+        </div>
+
+        <!-- Liste des contacts -->
+        <div *ngIf="!loading" class="px-4 pb-24">
+            <div 
+                *ngFor="let contact of contacts" 
+                (click)="viewConversation(contact)" 
+                class="contact-item glass-effect rounded-2xl p-4 mb-3 cursor-pointer group"
+            >
+                <div class="flex items-center space-x-4">
+                    <!-- Avatar avec badge -->
+                    <div class="relative flex-shrink-0">
+                        <div
+                            [style.background-color]="getAvatarColor(contact.email)"
+                            class="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg"
+                        >
+                            {{ contact?.name?.charAt(0) | uppercase }}
+                        </div>
+                        <!-- Badge de messages non lus -->
+                        <span 
+                            *ngIf="unreadCounts[contact.email] > 0"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg unread-badge"
+                        >
+                            {{ unreadCounts[contact.email] }}
+                        </span>
+                    </div>
+
+                    <!-- Infos du contact -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate text-lg">
+                                {{ contact?.name }}
+                            </h3>
+                            <span class="text-xs text-gray-500 flex-shrink-0 ml-2">
+                                {{ lastMessages[contact.email]?.timestamp || "" }}
+                            </span>
+                        </div>
+                        
+                        <!-- Statut en ligne -->
+                        <div class="flex items-center mb-2">
+                            <div 
+                                class="w-2 h-2 rounded-full mr-2 shadow-sm"
+                                [ngClass]="contact?.connected ? 'status-online' : 'status-offline'"
+                            ></div>
+                            <span class="text-sm font-medium"
+                                [ngClass]="contact?.connected ? 'text-green-600' : 'text-gray-500'"
+                            >
+                                {{ contact?.connected ? 'En ligne' : 'Hors ligne' }}
+                            </span>
+                        </div>
+                        
+                        <!-- Message preview -->
+                        <div class="flex items-center">
+                            <p class="text-sm text-gray-600 message-preview flex-1 mr-2">
+                                {{ (lastMessages[contact.email]?.content) || "Aucun message récent" }}
+                            </p>
+                            <!-- Indicateur de message non lu -->
+                            <div 
+                                *ngIf="lastMessages[contact.email] && !lastMessages[contact.email]?.seen && lastMessages[contact.email]?.senderEmail !== currentUserEmail"
+                                class="w-2 h-2 bg-blue-500 rounded-full unread-badge flex-shrink-0"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <!-- Flèche -->
+                    <div class="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message si aucun contact -->
+        <div *ngIf="!loading && contacts.length === 0" class="flex flex-col items-center justify-center py-20 px-6">
+            <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-6">
+                <i class="fas fa-user-friends text-3xl text-gray-400"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Aucun contact</h3>
+            <p class="text-gray-500 text-center leading-relaxed">
+                Commencez une nouvelle conversation en appuyant sur le bouton ci-dessous
+            </p>
+        </div>
+
+        <!-- Bouton flottant -->
+        <button 
+            (click)="goToChat()"
+            class="floating-btn fixed bottom-6 right-6 w-16 h-16 rounded-full text-white border-none shadow-2xl flex items-center justify-center z-50"
+        >
+            <i class="fas fa-plus text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Script pour les animations -->
+    <script>
+        // Animation d'apparition progressive des éléments
+        document.addEventListener('DOMContentLoaded', function() {
+            const contacts = document.querySelectorAll('.contact-item');
+            contacts.forEach((contact, index) => {
+                contact.style.opacity = '0';
+                contact.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    contact.style.transition = 'all 0.5s ease';
+                    contact.style.opacity = '1';
+                    contact.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

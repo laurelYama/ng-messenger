@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Messagerie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .register-bg {
+            background: 
+                radial-gradient(circle at 25% 75%, rgba(102, 126, 234, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(118, 75, 162, 0.12) 0%, transparent 50%),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+            transform: translateY(-1px);
+        }
+        
+        .register-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .register-btn:active {
+            transform: translateY(0);
+        }
+        
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .register-btn:hover::before {
+            left: 100%;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-with-icon {
+            padding-left: 40px;
+        }
+        
+        .input-group:focus-within .input-icon {
+            color: #764ba2;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .link-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+        
+        .link-gradient:hover {
+            text-decoration: underline;
+            transform: translateY(-1px);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            top: 15%;
+            left: 8%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            top: 65%;
+            right: 12%;
+            animation-delay: 3s;
+        }
+        
+        .shape:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            bottom: 25%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+        
+        .shape:nth-child(4) {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            top: 35%;
+            right: 20%;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-15px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(-25px) rotate(240deg);
+            }
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+            border-radius: 12px;
+            padding: 12px 16px;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #16a34a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .user-icon {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+                opacity: 1;
+            }
+        }
+        
+        .field-group {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .field-group:nth-child(1) { animation-delay: 0.1s; }
+        .field-group:nth-child(2) { animation-delay: 0.2s; }
+        .field-group:nth-child(3) { animation-delay: 0.3s; }
+        .field-group:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            background: #e5e7eb;
+            overflow: hidden;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+        
+        .strength-weak { 
+            background: #ef4444; 
+            width: 33%;
+        }
+        
+        .strength-medium { 
+            background: #f59e0b; 
+            width: 66%;
+        }
+        
+        .strength-strong { 
+            background: #10b981; 
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="register-bg min-h-screen flex items-center justify-center relative">
+    <!-- Floating Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="register-card w-full max-w-md p-8 rounded-2xl relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-100 to-blue-100 mb-4">
+                <i class="fas fa-user-plus text-2xl user-icon header-gradient"></i>
+            </div>
+            <h1 class="text-3xl font-bold header-gradient mb-2">Inscription</h1>
+            <p class="text-gray-600">Créez votre compte messagerie</p>
+        </div>
+        
+        <!-- Form -->
+        <form (ngSubmit)="onSubmit()" class="space-y-6" id="registerForm">
+            <!-- Name Field -->
+            <div class="field-group">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-user mr-2 text-purple-500"></i>
+                    Nom complet
+                </label>
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input
+                        type="text"
+                        [(ngModel)]="form.name"
+                        name="name"
+                        placeholder="Votre nom complet"
+                        class="form-input input-with-icon w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-purple-500/20"
+                        required
+                    />
+                </div>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="field-group">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-envelope mr-2 text-purple-500"></i>
+                    Adresse email
+                </label>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input
+                        type="email"
+                        [(ngModel)]="form.email"
+                        name="email"
+                        placeholder="votre@email.com"
+                        class="form-input input-with-icon w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-purple-500/20"
+                        required
+                    />
+                </div>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="field-group">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-lock mr-2 text-purple-500"></i>
+                    Mot de passe
+                </label>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input
+                         type="password"
+                        [(ngModel)]="form.password"
+                        name="password"
+                        placeholder="••••••••"
+                        class="form-input input-with-icon w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-purple-500/20"
+                        required
+                        id="password"
+                    />
+                </div>
+                
+            </div>
+            
+            
+            
+            <!-- Error/Success Messages -->
+            <div class="error-message hidden" id="errorMessage">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span id="errorText">Une erreur s'est produite</span>
+            </div>
+            
+            <div class="success-message hidden" id="successMessage">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>Compte créé avec succès ! Redirection...</span>
+            </div>
+            
+            <!-- Register Button -->
+            <button
+                type="submit"
+                class="register-btn w-full py-3 px-6 text-white font-semibold rounded-xl"
+            >
+                <i class="fas fa-user-plus mr-2"></i>
+                Créer mon compte
+            </button>
+            
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-white text-gray-500">ou</span>
+                </div>
+            </div>
+            
+            <!-- Login Link -->
+            <div class="text-center">
+              <span class="text-gray-600">Vous avez déjà un compte ?</span>
+              <a [routerLink]="'/login'" class="link-gradient font-semibold ml-1">
+                  Se connecter
+                  <i class="fas fa-sign-in-alt ml-1"></i>
+              </a>
+          </div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="text-center mt-8 pt-6 border-t border-gray-100">
+            <p class="text-xs text-gray-500">
+                © 2025 Messagerie. Tous droits réservés.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            let feedback = '';
+            
+            // Check password strength
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            // Update strength bar
+            strengthBar.className = 'strength-bar';
+            if (strength >= 3) {
+                strengthBar.classList.add('strength-strong');
+                feedback = 'Mot de passe fort !';
+            } else if (strength >= 2) {
+                strengthBar.classList.add('strength-medium');
+                feedback = 'Mot de passe moyen';
+            } else if (password.length > 0) {
+                strengthBar.classList.add('strength-weak');
+                feedback = 'Mot de passe faible';
+            }
+            
+            strengthText.textContent = feedback || 'Utilisez au moins 8 caractères avec des lettres et des chiffres';
+        });
+        
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const terms = this.querySelector('input[type="checkbox"]').checked;
+            
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+            
+            // Hide previous messages
+            errorMsg.classList.add('hidden');
+            successMsg.classList.add('hidden');
+            
+            // Validation
+            if (!name || !email || !password) {
+                document.getElementById('errorText').textContent = 'Veuillez remplir tous les champs';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            if (!terms) {
+                document.getElementById('errorText').textContent = 'Veuillez accepter les conditions d\'utilisation';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            if (password.length < 8) {
+                document.getElementById('errorText').textContent = 'Le mot de passe doit contenir au moins 8 caractères';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            // Simulate registration
+            if (email === 'test@test.com') {
+                document.getElementById('errorText').textContent = 'Cette adresse email est déjà utilisée';
+                errorMsg.classList.remove('hidden');
+            } else {
+                // Success
+                successMsg.classList.remove('hidden');
+                setTimeout(() => {
+                    alert('Inscription réussie ! Redirection vers la page de connexion...');
+                }, 2000);
+            }
+        });
+        
+        // Hide messages when user starts typing
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                document.getElementById('errorMessage').classList.add('hidden');
+                document.getElementById('successMessage').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
