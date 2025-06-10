@@ -1,27 +1,68 @@
-# NgMessenger
+ng-messenger
+ng-messenger est une application de messagerie instantanée développée avec Angular. Elle permet aux utilisateurs de s’inscrire, se connecter, gérer leurs contacts, discuter en temps réel et recevoir des notifications de nouveaux messages.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
+Fonctionnalités
+Authentification : Inscription, connexion, gestion du token JWT.
+Gestion des contacts : Ajout, affichage et sélection de contacts.
+Messagerie :
+Envoi et réception de messages.
+Affichage des conversations.
+Indicateur de messages non lus.
+Rafraîchissement automatique des conversations.
 
-## Development server
+UI Moderne : Interface responsive avec TailwindCSS et animations.
+Sécurité : Accès protégé par token, gestion des erreurs.
+Prérequis
+Node.js (v18+ recommandé)
+Angular CLI (v16+ recommandé)
+Un backend compatible (API RESTful avec endpoints pour l’auth, les contacts et les messages)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1.Installation
+Cloner le dépôt :
+git clone https://github.com/laurelYama/ng-messenger.git
+cd ng-messenger
 
-## Code scaffolding
+2.Installer les dépendances :
+npm install
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+3.Configurer l’environnement :
 
-## Build
+Modifier le fichier environment.ts pour pointer vers l’URL de votre API backend :
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api' // Adapter selon votre backend
+};
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+4.Lancer l’application :
+ng serve
 
-## Running unit tests
+L’application sera accessible sur http://localhost:4200.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Structure du projet
 
-## Running end-to-end tests
+src/
+ ├── app/
+ │    ├── auth/           # Authentification (login, register)
+ │    ├── chat/           # Composant de chat
+ │    ├── contacts/       # Gestion des contacts
+ │    ├── conversation/   # Affichage d'une conversation
+ │    ├── core/           # Services partagés (auth, chat, contact)
+ │    └── models/         # Modèles TypeScript
+ ├── assets/
+ └── environments/
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+ Personnalisation
+Thème : L’UI utilise TailwindCSS, modifiable dans les fichiers CSS.
+Services : Les appels API sont centralisés dans services.
+Sécurité : Le token JWT est stocké dans le localStorage et envoyé dans les headers HTTP.
+Bonnes pratiques
+Utilisation de composants standalone Angular.
+Injection de dépendances pour les services.
+Rafraîchissement automatique des conversations.
+Gestion centralisée des erreurs.
 
-## Further help
+Licence
+Ce projet est sous licence MIT.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Contact
+Pour toute question, contactez ngwambilaj@gmail.com.
