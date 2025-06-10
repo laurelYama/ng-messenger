@@ -9,7 +9,7 @@
 ## 🚀 Fonctionnalités
 
 * **Authentification** : Inscription, connexion, gestion du token JWT
-* **Contacts** : Ajout, suppression, affichage, sélection
+* **Contacts** : Ajout, affichage, sélection
 * **Messagerie** :
 
   * Envoi et réception de messages
@@ -23,7 +23,7 @@
 
 * Node.js (v18+)
 * Angular CLI (v16+)
-* Un backend RESTful (Spring Boot, Express...)
+* Un backend RESTful (Spring Boot)
 
 ## ⚙️ Installation
 
