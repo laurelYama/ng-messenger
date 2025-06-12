@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit {
     textarea.style.height = textarea.scrollHeight + 'px';
   }
 
-  // 🔄 Affiche la conversation avec un utilisateur
+  // Affiche la conversation avec un utilisateur
   loadConversation(): void {
     if (!this.userEmail.trim()) {
       return;

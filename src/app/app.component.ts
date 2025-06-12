@@ -8,5 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [RouterOutlet, HttpClientModule],
   template: `<router-outlet />`
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'smstech';
+}
 

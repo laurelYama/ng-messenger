@@ -24,7 +24,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/v1/auth';
+  private baseUrl = 'api-smstech.esiitech-gabon.com/api/v1/auth';
   private readonly TOKEN_KEY = 'token';
 
   constructor(private http: HttpClient) {}
