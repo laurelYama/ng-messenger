@@ -1,0 +1,8 @@
+/* Masque la scrollbar sur tous les navigateurs modernes */
+.flex-1::-webkit-scrollbar {
+  display: none;
+}
+.flex-1 {
+  -ms-overflow-style: none;  /* IE et Edge */
+  scrollbar-width: none;     /* Firefox */
+}

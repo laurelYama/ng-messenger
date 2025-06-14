@@ -6,11 +6,12 @@ import { SendMessagePayload } from '../models/send-message-payload.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
@@ -19,6 +20,7 @@ export class ChatComponent implements OnInit {
   currentUserEmail = ''; // Email de l'utilisateur connecté
   messageContent = '';
   conversation: MessageModel[] = [];
+  private refreshInterval: any;
 
   constructor(
     private chatService: ChatService,
@@ -29,7 +31,18 @@ export class ChatComponent implements OnInit {
     const tokenData = this.decodeToken(this.authService.getToken());
     if (tokenData?.sub) {
       this.currentUserEmail = tokenData.sub;
-    } else {
+    }
+    // le refresh auto
+    this.refreshInterval = setInterval(() => {
+      if (this.userEmail.trim()) {
+        this.loadConversation();
+      }
+    }, 5000); // toutes les 5 secondes
+  }
+
+  ngOnDestroy(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
     }
   }
 

@@ -7,11 +7,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { ContactService } from '../core/services/contact.service';
 import { Contact } from '../models/contact.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-conversation',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   styleUrls: ['./conversation.component.css'],
   templateUrl: './conversation.component.html'
 })
@@ -67,9 +68,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
       next: (contacts) => {
         this.contact = contacts.find(c => c.email === this.contactEmail) || null;
       },
-      error: (err) => {
-        console.error('Erreur lors du chargement du contact:', err);
+      error: () => {
         this.contact = null;
+        alert("Erreur lors du chargement des informations du contact !");
       }
     });
   }
@@ -77,7 +78,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
   loadConversation(): void {
     this.chatService.getConversation(this.contactEmail).subscribe({
       next: (msgs) => this.messages = msgs,
-      error: (err) => console.error('Erreur chargement conversation', err)
+      error: () => {
+        alert("Erreur lors du chargement de la conversation !");
+      }
     });
   }
 
@@ -91,7 +94,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
         this.messageContent = '';
         this.loadConversation();
       },
-      error: (err) => alert('Erreur lors de l\'envoi du message')
+      error: () => {
+       alert("Erreur lors de l'envoi du message !");
+      }
     });
   }
 }

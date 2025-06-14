@@ -7,7 +7,7 @@ RUN npm run build -- --configuration production
 
 # Étape 2 : Serve via Apache
 FROM httpd:2.4
-COPY --from=builder /app/dist/ng-massenger/ /usr/local/apache2/htdocs/
+COPY --from=builder /app/dist/ng-messenger/ /usr/local/apache2/htdocs/
 
 # Active Angular Routing (pour les URLs propres)
 RUN sed -i '/<Directory "\/usr\/local\/apache2\/htdocs">/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /usr/local/apache2/conf/httpd.conf
